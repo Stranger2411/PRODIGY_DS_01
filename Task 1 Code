@@ -1,0 +1,25 @@
+import requests
+import matplotlib.pyplot as plt
+# URL of the World Bank API for total population
+url = 'http://api.worldbank.org/v2/country/all/indicator/SP.POP.TOTL?format=json&per_page=1000'
+
+# Fetching data from the API
+response = requests.get(url)
+data = response.json()
+
+# Extracting data points from the JSON response
+data_points = data[1]
+
+# Extracting country names and population values
+countries = [entry['country']['value'] for entry in data_points]
+populations = [entry['value'] for entry in data_points if entry['value'] is not None]
+# Plotting the histogram
+plt.figure(figsize=(12, 6))
+plt.hist(populations, bins=30, edgecolor='black')
+plt.xlabel('Population')
+plt.ylabel('Number of Countries')
+plt.title('Distribution of Total Population Across Countries')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.grid(True)
+plt.show()
